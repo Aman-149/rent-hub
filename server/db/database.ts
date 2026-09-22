@@ -147,786 +147,21 @@ export interface DatabaseData {
 
 const DB_FILE_PATH = path.join(process.cwd(), 'server', 'data', 'db.json');
 
-// Helper to seed initial high quality data
-function getInitialSeedData(): DatabaseData {
-  const salt = bcrypt.genSaltSync(10);
-  const defaultHash = bcrypt.hashSync('password123', salt);
-  const adminHash = bcrypt.hashSync('admin123', salt);
-  const landlordHash = bcrypt.hashSync('landlord123', salt);
-  const renterHash = bcrypt.hashSync('renter123', salt);
-
-  const users: User[] = [
-    {
-      id: 'usr_admin',
-      name: 'System Admin',
-      email: 'admin@renthub.com',
-      passwordHash: adminHash,
-      role: 'admin',
-      phone: '+251 911 000 001',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
-      bio: 'RentHub Platform Compliance and Trust Team.',
-      isVerified: true,
-      status: 'active',
-      createdAt: '2025-01-01T08:00:00.000Z',
-      updatedAt: '2025-01-01T08:00:00.000Z',
-    },
-    {
-      id: 'usr_landlord_1',
-      name: 'Abebe Tadesse',
-      email: 'landlord@renthub.com',
-      passwordHash: landlordHash,
-      role: 'landlord',
-      phone: '+251 911 234 567',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80',
-      bio: 'Experienced property owner in Bole and Kazanchis with high-end residential suites.',
-      isVerified: true,
-      status: 'active',
-      createdAt: '2025-01-05T10:00:00.000Z',
-      updatedAt: '2025-01-05T10:00:00.000Z',
-    },
-    {
-      id: 'usr_landlord_2',
-      name: 'Sara Worku',
-      email: 'sara.worku@example.com',
-      passwordHash: defaultHash,
-      role: 'landlord',
-      phone: '+251 922 987 654',
-      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80',
-      bio: 'Owner of modern family villas and luxury condominiums in CMC and Ayat.',
-      isVerified: true,
-      status: 'active',
-      createdAt: '2025-01-10T09:30:00.000Z',
-      updatedAt: '2025-01-10T09:30:00.000Z',
-    },
-    {
-      id: 'usr_landlord_3',
-      name: 'Dawit Mengistu',
-      email: 'dawit.m@example.com',
-      passwordHash: defaultHash,
-      role: 'landlord',
-      phone: '+251 933 456 789',
-      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80',
-      bio: 'Offering furnished executive suites near diplomatic zones in Old Airport.',
-      isVerified: true,
-      status: 'active',
-      createdAt: '2025-01-15T11:20:00.000Z',
-      updatedAt: '2025-01-15T11:20:00.000Z',
-    },
-    {
-      id: 'usr_renter_1',
-      name: 'Bethlehem Haile',
-      email: 'renter@renthub.com',
-      passwordHash: renterHash,
-      role: 'renter',
-      phone: '+251 912 345 678',
-      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&auto=format&fit=crop&q=80',
-      bio: 'Software engineer looking for modern 1 or 2 bedroom furnished apartments in Addis.',
-      isVerified: true,
-      status: 'active',
-      createdAt: '2025-02-01T14:00:00.000Z',
-      updatedAt: '2025-02-01T14:00:00.000Z',
-    },
-    {
-      id: 'usr_renter_2',
-      name: 'Yonas Kebede',
-      email: 'yonas.k@example.com',
-      passwordHash: defaultHash,
-      role: 'renter',
-      phone: '+251 944 112 233',
-      avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&auto=format&fit=crop&q=80',
-      bio: 'Young professional relocating to Addis Ababa.',
-      isVerified: false,
-      status: 'active',
-      createdAt: '2025-02-05T16:45:00.000Z',
-      updatedAt: '2025-02-05T16:45:00.000Z',
-    }
-  ];
-
-  const properties: Property[] = [
-    {
-      id: 'prop_1',
-      landlordId: 'usr_landlord_1',
-      title: 'Modern 2 Bedroom Luxury Apartment in Bole',
-      description: 'Stunning fully furnished 2-bedroom apartment situated in the heart of Bole near Medhanialem. Features open-plan living, custom Italian kitchen, large sunny balcony, 24/7 backup generator, water reserve tank, and secure underground parking. Ideal for expats and professionals.',
-      propertyType: 'Apartment',
-      price: 35000,
-      currency: 'ETB',
-      city: 'Addis Ababa',
-      neighborhood: 'Bole',
-      address: 'Near Medhanialem Church, Bole Road',
-      bedrooms: 2,
-      bathrooms: 2,
-      sizeSqFt: 120,
-      isFurnished: true,
-      availableFrom: '2026-09-01',
-      contactPreference: 'Platform Chat & Phone',
-      status: 'active',
-      viewsCount: 142,
-      isFeatured: true,
-      amenities: ['Wi-Fi', 'Parking', 'Water Tank', 'Backup Generator', 'Security 24/7', 'Balcony', 'Elevator', 'Furnished', 'Modern Kitchen'],
-      images: [
-        {
-          id: 'img_1_1',
-          propertyId: 'prop_1',
-          imageUrl: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&auto=format&fit=crop&q=80',
-          isPrimary: true,
-          caption: 'Spacious living room with natural light',
-          sortOrder: 1
-        },
-        {
-          id: 'img_1_2',
-          propertyId: 'prop_1',
-          imageUrl: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200&auto=format&fit=crop&q=80',
-          isPrimary: false,
-          caption: 'Modern dining and kitchen area',
-          sortOrder: 2
-        },
-        {
-          id: 'img_1_3',
-          propertyId: 'prop_1',
-          imageUrl: 'https://images.unsplash.com/photo-1540518614846-7ede433c4ef7?w=1200&auto=format&fit=crop&q=80',
-          isPrimary: false,
-          caption: 'Master bedroom with en-suite bath',
-          sortOrder: 3
-        },
-        {
-          id: 'img_1_4',
-          propertyId: 'prop_1',
-          imageUrl: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=1200&auto=format&fit=crop&q=80',
-          isPrimary: false,
-          caption: 'Clean contemporary bathroom',
-          sortOrder: 4
-        }
-      ],
-      createdAt: '2026-08-10T10:00:00.000Z',
-      updatedAt: '2026-08-10T10:00:00.000Z'
-    },
-    {
-      id: 'prop_2',
-      landlordId: 'usr_landlord_2',
-      title: 'Spacious 4 Bedroom Family Villa with Garden in CMC',
-      description: 'Elegant standalone 4-bedroom family villa in the peaceful residential community of CMC Michael. Offers private gated compound, manicured green garden, staff quarters, multiple parking spaces, and high ceiling living room with fireplace.',
-      propertyType: 'Villa',
-      price: 65000,
-      currency: 'ETB',
-      city: 'Addis Ababa',
-      neighborhood: 'CMC',
-      address: 'CMC Michael Residential Zone',
-      bedrooms: 4,
-      bathrooms: 3,
-      sizeSqFt: 350,
-      isFurnished: false,
-      availableFrom: '2026-09-15',
-      contactPreference: 'Platform Chat',
-      status: 'active',
-      viewsCount: 98,
-      isFeatured: true,
-      amenities: ['Parking', 'Water Tank', 'Security 24/7', 'Private Garden', 'Pet Friendly', 'Balcony', 'Staff Quarters'],
-      images: [
-        {
-          id: 'img_2_1',
-          propertyId: 'prop_2',
-          imageUrl: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&auto=format&fit=crop&q=80',
-          isPrimary: true,
-          caption: 'Villa exterior and entrance',
-          sortOrder: 1
-        },
-        {
-          id: 'img_2_2',
-          propertyId: 'prop_2',
-          imageUrl: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&auto=format&fit=crop&q=80',
-          isPrimary: false,
-          caption: 'Expansive family room',
-          sortOrder: 2
-        },
-        {
-          id: 'img_2_3',
-          propertyId: 'prop_2',
-          imageUrl: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&auto=format&fit=crop&q=80',
-          isPrimary: false,
-          caption: 'Garden patio area',
-          sortOrder: 3
-        }
-      ],
-      createdAt: '2026-08-12T14:30:00.000Z',
-      updatedAt: '2026-08-12T14:30:00.000Z'
-    },
-    {
-      id: 'prop_3',
-      landlordId: 'usr_landlord_1',
-      title: 'Chic Studio Apartment Near UNECA Kazanchis',
-      description: 'Compact, beautifully designed studio apartment steps away from the UN ECA and Radisson Blu in Kazanchis. Includes high-speed fiber internet, kitchenette with induction stove, smart TV, hot shower, and quiet workspace. Water and electricity are fully included in rent.',
-      propertyType: 'Studio',
-      price: 20000,
-      currency: 'ETB',
-      city: 'Addis Ababa',
-      neighborhood: 'Kazanchis',
-      address: 'Behind Radisson Blu, Kazanchis',
-      bedrooms: 1,
-      bathrooms: 1,
-      sizeSqFt: 45,
-      isFurnished: true,
-      availableFrom: '2026-08-28',
-      contactPreference: 'Platform Chat',
-      status: 'active',
-      viewsCount: 230,
-      isFeatured: true,
-      amenities: ['Wi-Fi', 'Water Tank', 'Backup Generator', 'Elevator', 'Security 24/7', 'Furnished', 'Utilities Included'],
-      images: [
-        {
-          id: 'img_3_1',
-          propertyId: 'prop_3',
-          imageUrl: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&auto=format&fit=crop&q=80',
-          isPrimary: true,
-          caption: 'Cozy studio layout with workspace',
-          sortOrder: 1
-        },
-        {
-          id: 'img_3_2',
-          propertyId: 'prop_3',
-          imageUrl: 'https://images.unsplash.com/photo-1536376072261-38c75010e6c9?w=1200&auto=format&fit=crop&q=80',
-          isPrimary: false,
-          caption: 'Modern bathroom fixture',
-          sortOrder: 2
-        }
-      ],
-      createdAt: '2026-08-15T09:00:00.000Z',
-      updatedAt: '2026-08-15T09:00:00.000Z'
-    },
-    {
-      id: 'prop_4',
-      landlordId: 'usr_landlord_3',
-      title: 'Diplomatic 3 Bedroom Penthouse in Old Airport',
-      description: 'Exclusive 3-bedroom penthouse with panoramic views over the green hills of Old Airport. Top floor privacy, expansive wrap-around terrace, master suite with walk-in closet, jacuzzi bath, dual water reservoirs, dedicated standby generator, and concierge service.',
-      propertyType: 'Apartment',
-      price: 80000,
-      currency: 'ETB',
-      city: 'Addis Ababa',
-      neighborhood: 'Old Airport',
-      address: 'Near International Community School (ICS)',
-      bedrooms: 3,
-      bathrooms: 3,
-      sizeSqFt: 220,
-      isFurnished: true,
-      availableFrom: '2026-09-01',
-      contactPreference: 'Platform Chat & Phone',
-      status: 'active',
-      viewsCount: 175,
-      isFeatured: true,
-      amenities: ['Wi-Fi', 'Parking', 'Water Tank', 'Backup Generator', 'Security 24/7', 'Balcony', 'Elevator', 'Furnished', 'Air Conditioning', 'Gym Access'],
-      images: [
-        {
-          id: 'img_4_1',
-          propertyId: 'prop_4',
-          imageUrl: 'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?w=1200&auto=format&fit=crop&q=80',
-          isPrimary: true,
-          caption: 'Penthouse living space with terrace views',
-          sortOrder: 1
-        },
-        {
-          id: 'img_4_2',
-          propertyId: 'prop_4',
-          imageUrl: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200&auto=format&fit=crop&q=80',
-          isPrimary: false,
-          caption: 'Gourmet kitchen with island',
-          sortOrder: 2
-        },
-        {
-          id: 'img_4_3',
-          propertyId: 'prop_4',
-          imageUrl: 'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?w=1200&auto=format&fit=crop&q=80',
-          isPrimary: false,
-          caption: 'Master ensuite bath',
-          sortOrder: 3
-        }
-      ],
-      createdAt: '2026-08-16T12:00:00.000Z',
-      updatedAt: '2026-08-16T12:00:00.000Z'
-    },
-    {
-      id: 'prop_5',
-      landlordId: 'usr_landlord_2',
-      title: 'Newly Built 2 Bedroom Condominium in Ayat',
-      description: 'Brand new 2-bedroom condominium located in Ayat Zone 2. Features clean ceramic tiling throughout, ample storage, reliable water tank system, secured gated building, and walking distance to the light rail station and supermarkets.',
-      propertyType: 'Condominium',
-      price: 18000,
-      currency: 'ETB',
-      city: 'Addis Ababa',
-      neighborhood: 'Ayat',
-      address: 'Ayat Zone 2 near Light Rail',
-      bedrooms: 2,
-      bathrooms: 1,
-      sizeSqFt: 85,
-      isFurnished: false,
-      availableFrom: '2026-08-30',
-      contactPreference: 'Platform Chat',
-      status: 'active',
-      viewsCount: 88,
-      isFeatured: false,
-      amenities: ['Water Tank', 'Parking', 'Balcony', 'Security 24/7'],
-      images: [
-        {
-          id: 'img_5_1',
-          propertyId: 'prop_5',
-          imageUrl: 'https://images.unsplash.com/photo-1560185127-6ed189bf02f4?w=1200&auto=format&fit=crop&q=80',
-          isPrimary: true,
-          caption: 'Bright living and dining space',
-          sortOrder: 1
-        },
-        {
-          id: 'img_5_2',
-          propertyId: 'prop_5',
-          imageUrl: 'https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=1200&auto=format&fit=crop&q=80',
-          isPrimary: false,
-          caption: 'Kitchen space with cabinets',
-          sortOrder: 2
-        }
-      ],
-      createdAt: '2026-08-18T15:20:00.000Z',
-      updatedAt: '2026-08-18T15:20:00.000Z'
-    },
-    {
-      id: 'prop_6',
-      landlordId: 'usr_landlord_1',
-      title: 'Sunlit 3 Bedroom House in Gerji',
-      description: 'Comfortable family townhouse in Gerji Mebrat Hail. Well maintained with private courtyard, separate kitchen, dedicated laundry room, reliable backup utilities, and strong 24/7 neighborhood security watch.',
-      propertyType: 'House',
-      price: 45000,
-      currency: 'ETB',
-      city: 'Addis Ababa',
-      neighborhood: 'Gerji',
-      address: 'Gerji Mebrat Hail, Addis Ababa',
-      bedrooms: 3,
-      bathrooms: 2,
-      sizeSqFt: 180,
-      isFurnished: false,
-      availableFrom: '2026-09-10',
-      contactPreference: 'Platform Chat',
-      status: 'active',
-      viewsCount: 110,
-      isFeatured: false,
-      amenities: ['Parking', 'Water Tank', 'Backup Generator', 'Balcony', 'Laundry', 'Security 24/7'],
-      images: [
-        {
-          id: 'img_6_1',
-          propertyId: 'prop_6',
-          imageUrl: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=1200&auto=format&fit=crop&q=80',
-          isPrimary: true,
-          caption: 'Front facade and driveway',
-          sortOrder: 1
-        },
-        {
-          id: 'img_6_2',
-          propertyId: 'prop_6',
-          imageUrl: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=1200&auto=format&fit=crop&q=80',
-          isPrimary: false,
-          caption: 'Living hall with high ceiling',
-          sortOrder: 2
-        }
-      ],
-      createdAt: '2026-08-19T08:15:00.000Z',
-      updatedAt: '2026-08-19T08:15:00.000Z'
-    },
-    {
-      id: 'prop_7',
-      landlordId: 'usr_landlord_3',
-      title: 'Prime 1 Bedroom Executive Flat in Megenagna',
-      description: 'Convenient 1-bedroom flat in commercial Megenagna district near Zefmesh Grand Mall. Perfect for single professionals. Fully serviced building with elevator, backup generator, fast WiFi, and round the clock security.',
-      propertyType: 'Apartment',
-      price: 24000,
-      currency: 'ETB',
-      city: 'Addis Ababa',
-      neighborhood: 'Megenagna',
-      address: 'Near Zefmesh Mall, Megenagna',
-      bedrooms: 1,
-      bathrooms: 1,
-      sizeSqFt: 60,
-      isFurnished: true,
-      availableFrom: '2026-09-01',
-      contactPreference: 'Platform Chat',
-      status: 'active',
-      viewsCount: 160,
-      isFeatured: true,
-      amenities: ['Wi-Fi', 'Backup Generator', 'Elevator', 'Security 24/7', 'Furnished', 'Water Tank'],
-      images: [
-        {
-          id: 'img_7_1',
-          propertyId: 'prop_7',
-          imageUrl: 'https://images.unsplash.com/photo-1502005229762-ee1afd5583e5?w=1200&auto=format&fit=crop&q=80',
-          isPrimary: true,
-          caption: 'Modern open concept interior',
-          sortOrder: 1
-        },
-        {
-          id: 'img_7_2',
-          propertyId: 'prop_7',
-          imageUrl: 'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=1200&auto=format&fit=crop&q=80',
-          isPrimary: false,
-          caption: 'Comfortable bedroom suite',
-          sortOrder: 2
-        }
-      ],
-      createdAt: '2026-08-20T11:40:00.000Z',
-      updatedAt: '2026-08-20T11:40:00.000Z'
-    },
-    {
-      id: 'prop_8',
-      landlordId: 'usr_landlord_2',
-      title: 'Affordable Furnished Private Room in Saris',
-      description: 'Cozy private room with shared modern kitchen and bathroom in Saris Abo. Perfect for university students or interns. Clean, peaceful, includes fast Wi-Fi and water supply.',
-      propertyType: 'Room',
-      price: 8500,
-      currency: 'ETB',
-      city: 'Addis Ababa',
-      neighborhood: 'Saris',
-      address: 'Saris Abo near Ring Road',
-      bedrooms: 1,
-      bathrooms: 1,
-      sizeSqFt: 25,
-      isFurnished: true,
-      availableFrom: '2026-08-29',
-      contactPreference: 'Platform Chat',
-      status: 'active',
-      viewsCount: 65,
-      isFeatured: false,
-      amenities: ['Wi-Fi', 'Water Tank', 'Furnished', 'Security 24/7'],
-      images: [
-        {
-          id: 'img_8_1',
-          propertyId: 'prop_8',
-          imageUrl: 'https://images.unsplash.com/photo-1598928506311-c55ded91a20c?w=1200&auto=format&fit=crop&q=80',
-          isPrimary: true,
-          caption: 'Neat private bedroom',
-          sortOrder: 1
-        }
-      ],
-      createdAt: '2026-08-21T13:10:00.000Z',
-      updatedAt: '2026-08-21T13:10:00.000Z'
-    },
-    {
-      id: 'prop_9',
-      landlordId: 'usr_landlord_1',
-      title: 'High-Floor 3 Bedroom Luxury Apartment in Bole Atlas',
-      description: 'Top grade 3-bedroom apartment with scenic mountain and airport views. Features wooden flooring, en-suite bathrooms, balcony, German kitchen equipment, gym access, backup generators, and fiber connection.',
-      propertyType: 'Apartment',
-      price: 52000,
-      currency: 'ETB',
-      city: 'Addis Ababa',
-      neighborhood: 'Bole',
-      address: 'Bole Atlas, near Desalegn Hotel',
-      bedrooms: 3,
-      bathrooms: 2.5,
-      sizeSqFt: 165,
-      isFurnished: true,
-      availableFrom: '2026-09-01',
-      contactPreference: 'Platform Chat & Phone',
-      status: 'rented',
-      viewsCount: 310,
-      isFeatured: false,
-      amenities: ['Wi-Fi', 'Parking', 'Water Tank', 'Backup Generator', 'Elevator', 'Security 24/7', 'Gym Access', 'Balcony', 'Furnished'],
-      images: [
-        {
-          id: 'img_9_1',
-          propertyId: 'prop_9',
-          imageUrl: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=1200&auto=format&fit=crop&q=80',
-          isPrimary: true,
-          caption: 'Spacious open living room',
-          sortOrder: 1
-        },
-        {
-          id: 'img_9_2',
-          propertyId: 'prop_9',
-          imageUrl: 'https://images.unsplash.com/photo-1554995207-c18c203602cb?w=1200&auto=format&fit=crop&q=80',
-          isPrimary: false,
-          caption: 'Modern luxury kitchen',
-          sortOrder: 2
-        }
-      ],
-      createdAt: '2026-08-01T09:00:00.000Z',
-      updatedAt: '2026-08-22T10:00:00.000Z'
-    },
-    {
-      id: 'prop_10',
-      landlordId: 'usr_landlord_3',
-      title: 'Spacious 2 Bedroom Modern Apartment in Kazanchis',
-      description: 'Modern and quiet 2-bedroom residence situated just 2 minutes from Intercontinental Hotel. Large living room, master suite, high-speed lift, underground secure parking, 24-hour security guards, water reserve.',
-      propertyType: 'Apartment',
-      price: 32000,
-      currency: 'ETB',
-      city: 'Addis Ababa',
-      neighborhood: 'Kazanchis',
-      address: 'Kazanchis Business Corridor',
-      bedrooms: 2,
-      bathrooms: 2,
-      sizeSqFt: 110,
-      isFurnished: true,
-      availableFrom: '2026-09-05',
-      contactPreference: 'Platform Chat',
-      status: 'active',
-      viewsCount: 140,
-      isFeatured: true,
-      amenities: ['Wi-Fi', 'Parking', 'Water Tank', 'Backup Generator', 'Elevator', 'Security 24/7', 'Balcony', 'Furnished'],
-      images: [
-        {
-          id: 'img_10_1',
-          propertyId: 'prop_10',
-          imageUrl: 'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200&auto=format&fit=crop&q=80',
-          isPrimary: true,
-          caption: 'Well-appointed living area',
-          sortOrder: 1
-        },
-        {
-          id: 'img_10_2',
-          propertyId: 'prop_10',
-          imageUrl: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1200&auto=format&fit=crop&q=80',
-          isPrimary: false,
-          caption: 'Guest bedroom with work desk',
-          sortOrder: 2
-        }
-      ],
-      createdAt: '2026-08-22T16:00:00.000Z',
-      updatedAt: '2026-08-22T16:00:00.000Z'
-    },
-    {
-      id: 'prop_11',
-      landlordId: 'usr_landlord_2',
-      title: 'Grand 5 Bedroom Luxury Residence in Old Airport',
-      description: 'Immaculate luxury estate in prime Old Airport enclave with private security post, expansive swimming pool, landscaped gardens, 3-car garage, backup solar and generator systems, and staff quarters.',
-      propertyType: 'Villa',
-      price: 120000,
-      currency: 'ETB',
-      city: 'Addis Ababa',
-      neighborhood: 'Old Airport',
-      address: 'Old Airport Diplomatic Quarter',
-      bedrooms: 5,
-      bathrooms: 4,
-      sizeSqFt: 480,
-      isFurnished: true,
-      availableFrom: '2026-09-15',
-      contactPreference: 'Platform Chat & Phone',
-      status: 'active',
-      viewsCount: 195,
-      isFeatured: true,
-      amenities: ['Wi-Fi', 'Parking', 'Water Tank', 'Backup Generator', 'Security 24/7', 'Private Garden', 'Balcony', 'Furnished', 'Air Conditioning', 'Gym Access', 'Pet Friendly'],
-      images: [
-        {
-          id: 'img_11_1',
-          propertyId: 'prop_11',
-          imageUrl: 'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=1200&auto=format&fit=crop&q=80',
-          isPrimary: true,
-          caption: 'Grand luxury estate frontage',
-          sortOrder: 1
-        },
-        {
-          id: 'img_11_2',
-          propertyId: 'prop_11',
-          imageUrl: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200&auto=format&fit=crop&q=80',
-          isPrimary: false,
-          caption: 'Living room with garden views',
-          sortOrder: 2
-        }
-      ],
-      createdAt: '2026-08-23T10:00:00.000Z',
-      updatedAt: '2026-08-23T10:00:00.000Z'
-    },
-    {
-      id: 'prop_12',
-      landlordId: 'usr_landlord_1',
-      title: 'Cozy 1 Bedroom Apartment in Saris near Transport Hub',
-      description: 'Clean and well-maintained 1-bedroom apartment close to Kadisco / Saris junction. Great access to public transit, quiet compound with gatekeeper and water storage.',
-      propertyType: 'Apartment',
-      price: 15000,
-      currency: 'ETB',
-      city: 'Addis Ababa',
-      neighborhood: 'Saris',
-      address: 'Near Kadisco, Saris',
-      bedrooms: 1,
-      bathrooms: 1,
-      sizeSqFt: 55,
-      isFurnished: false,
-      availableFrom: '2026-09-01',
-      contactPreference: 'Platform Chat',
-      status: 'active',
-      viewsCount: 82,
-      isFeatured: false,
-      amenities: ['Water Tank', 'Parking', 'Security 24/7', 'Balcony'],
-      images: [
-        {
-          id: 'img_12_1',
-          propertyId: 'prop_12',
-          imageUrl: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200&auto=format&fit=crop&q=80',
-          isPrimary: true,
-          caption: 'Kitchen and living space',
-          sortOrder: 1
-        }
-      ],
-      createdAt: '2026-08-24T14:15:00.000Z',
-      updatedAt: '2026-08-24T14:15:00.000Z'
-    }
-  ];
-
-  const favorites: Favorite[] = [
-    {
-      id: 'fav_1',
-      userId: 'usr_renter_1',
-      propertyId: 'prop_1',
-      createdAt: '2026-08-20T12:00:00.000Z'
-    },
-    {
-      id: 'fav_2',
-      userId: 'usr_renter_1',
-      propertyId: 'prop_3',
-      createdAt: '2026-08-22T08:30:00.000Z'
-    }
-  ];
-
-  const conversations: Conversation[] = [
-    {
-      id: 'conv_1',
-      propertyId: 'prop_1',
-      landlordId: 'usr_landlord_1',
-      renterId: 'usr_renter_1',
-      createdAt: '2026-08-22T10:00:00.000Z',
-      updatedAt: '2026-08-22T10:35:00.000Z',
-      lastMessageAt: '2026-08-22T10:35:00.000Z'
-    }
-  ];
-
-  const messages: Message[] = [
-    {
-      id: 'msg_1',
-      conversationId: 'conv_1',
-      senderId: 'usr_renter_1',
-      receiverId: 'usr_landlord_1',
-      content: 'Hello Ato Abebe, is this 2-bedroom apartment in Bole still available for long term rent?',
-      isRead: true,
-      createdAt: '2026-08-22T10:00:00.000Z'
-    },
-    {
-      id: 'msg_2',
-      conversationId: 'conv_1',
-      senderId: 'usr_landlord_1',
-      receiverId: 'usr_renter_1',
-      content: 'Hello Bethlehem! Yes, it is fully available starting September 1st. Would you like to schedule an in-person viewing?',
-      isRead: true,
-      createdAt: '2026-08-22T10:15:00.000Z'
-    },
-    {
-      id: 'msg_3',
-      conversationId: 'conv_1',
-      senderId: 'usr_renter_1',
-      receiverId: 'usr_landlord_1',
-      content: 'That would be great! Can I come tomorrow at 3:00 PM?',
-      isRead: true,
-      createdAt: '2026-08-22T10:30:00.000Z'
-    },
-    {
-      id: 'msg_4',
-      conversationId: 'conv_1',
-      senderId: 'usr_landlord_1',
-      receiverId: 'usr_renter_1',
-      content: 'Perfect! I will meet you at the main gate near Medhanialem. See you tomorrow at 3:00 PM.',
-      isRead: false,
-      createdAt: '2026-08-22T10:35:00.000Z'
-    }
-  ];
-
-  const inquiries: Inquiry[] = [
-    {
-      id: 'inq_1',
-      propertyId: 'prop_1',
-      renterId: 'usr_renter_1',
-      landlordId: 'usr_landlord_1',
-      message: 'Interested in leasing this apartment for a 1-year contract. I would love to check the water pressure and parking spot.',
-      preferredViewingDate: '2026-08-28',
-      preferredContactTime: 'Afternoon (2:00 PM - 5:00 PM)',
-      status: 'viewing_scheduled',
-      landlordNotes: 'Scheduled visit for Friday at 3:00 PM.',
-      createdAt: '2026-08-22T09:55:00.000Z',
-      updatedAt: '2026-08-22T10:40:00.000Z'
-    },
-    {
-      id: 'inq_2',
-      propertyId: 'prop_3',
-      renterId: 'usr_renter_1',
-      landlordId: 'usr_landlord_1',
-      message: 'Hi, does the rent include high-speed Wi-Fi and power backup?',
-      preferredViewingDate: '2026-08-30',
-      preferredContactTime: 'Morning (9:00 AM - 12:00 PM)',
-      status: 'contacted',
-      landlordNotes: 'Replied via messaging confirming all utilities are included.',
-      createdAt: '2026-08-24T11:20:00.000Z',
-      updatedAt: '2026-08-24T12:00:00.000Z'
-    }
-  ];
-
-  const reports: Report[] = [
-    {
-      id: 'rep_1',
-      propertyId: 'prop_8',
-      reporterId: 'usr_renter_2',
-      reason: 'Wrong information',
-      details: 'Inquired about water availability, owner said water is scheduled 3 days a week instead of constant.',
-      status: 'pending',
-      adminNotes: undefined,
-      createdAt: '2026-08-25T14:10:00.000Z'
-    }
-  ];
-
-  const notifications: Notification[] = [
-    {
-      id: 'notif_1',
-      userId: 'usr_renter_1',
-      title: 'Viewing Confirmed',
-      message: 'Abebe Tadesse scheduled your viewing for Modern 2 Bedroom Luxury Apartment in Bole.',
-      type: 'inquiry_update',
-      link: '/dashboard/renter',
-      isRead: false,
-      createdAt: '2026-08-22T10:40:00.000Z'
-    },
-    {
-      id: 'notif_2',
-      userId: 'usr_landlord_1',
-      title: 'New Property Inquiry',
-      message: 'Bethlehem Haile submitted an inquiry for Modern 2 Bedroom Luxury Apartment.',
-      type: 'new_inquiry',
-      link: '/dashboard/landlord',
-      isRead: true,
-      createdAt: '2026-08-22T09:55:00.000Z'
-    }
-  ];
-
-  const reviews: Review[] = [
-    {
-      id: 'rev_1',
-      propertyId: 'prop_1',
-      landlordId: 'usr_landlord_1',
-      renterId: 'usr_renter_1',
-      rating: 5,
-      comment: 'Superb apartment! Reliable water reserve and standby generator were a lifesaver during power outages. Ato Abebe is a prompt, professional landlord.',
-      createdAt: '2026-08-15T14:30:00.000Z'
-    },
-    {
-      id: 'rev_2',
-      propertyId: 'prop_3',
-      landlordId: 'usr_landlord_1',
-      renterId: 'usr_renter_2',
-      rating: 5,
-      comment: 'Very cozy studio in Kazanchis with high speed internet. Walking distance to UN ECA. Highly recommended.',
-      createdAt: '2026-08-18T10:15:00.000Z'
-    }
-  ];
-
+// Returns a completely empty database. No demo users, properties, or any
+// other records are pre-seeded — admins are created via scripts/create-admin.ts
+// (or the ADMIN_EMAIL/ADMIN_PASSWORD env bootstrap) and renters/landlords
+// register themselves through POST /api/auth/register.
+function getEmptyDatabase(): DatabaseData {
   return {
-    users,
-    properties,
-    favorites,
-    conversations,
-    messages,
-    inquiries,
-    reports,
-    notifications,
-    reviews
+    users: [],
+    properties: [],
+    favorites: [],
+    conversations: [],
+    messages: [],
+    inquiries: [],
+    reports: [],
+    notifications: [],
+    reviews: []
   };
 }
 
@@ -945,6 +180,7 @@ class Database {
     const dbUrl = process.env.DATABASE_URL;
     if (!dbUrl) {
       console.log('[RentHub Database] Running on Embedded Persistent Storage (server/data/db.json).');
+      await this.bootstrapAdminFromEnv();
       return;
     }
 
@@ -971,6 +207,8 @@ class Database {
         await this.pool.query(schemaSql);
         console.log('[RentHub Database] PostgreSQL tables and indexes verified.');
       }
+
+      await this.bootstrapAdminFromEnv();
     } catch (err: any) {
       console.warn('[RentHub Database] PostgreSQL connection note (falling back to embedded file database):', err.message);
       this.postgresError = err.message;
@@ -992,10 +230,10 @@ class Database {
         return parsed;
       }
     } catch (e) {
-      console.error('Error loading database from file, re-initializing with seed data:', e);
+      console.error('Error loading database from file, re-initializing with an empty database:', e);
     }
 
-    const initial = getInitialSeedData();
+    const initial = getEmptyDatabase();
     this.saveData(initial);
     return initial;
   }
@@ -1395,11 +633,102 @@ class Database {
     return true;
   }
 
-  public resetSeedData(): DatabaseData {
-    const fresh = getInitialSeedData();
-    this.data = fresh;
+  public clearAllData(): DatabaseData {
+    const empty = getEmptyDatabase();
+    this.data = empty;
     this.persist();
-    return fresh;
+    return empty;
+  }
+
+  /**
+   * Creates an admin account with the given credentials. Idempotent: if a
+   * user with this email already exists, it is left untouched (and, if it
+   * isn't already an admin, its role is NOT changed automatically — call
+   * sites should surface that to the operator instead of silently escalating
+   * an existing account). Works against both the PostgreSQL and embedded
+   * JSON storage modes. Used by scripts/create-admin.ts and the
+   * ADMIN_EMAIL/ADMIN_PASSWORD startup bootstrap.
+   */
+  public async createAdminUser(email: string, password: string, name: string = 'Admin'): Promise<{ created: boolean; user: Omit<User, 'passwordHash'> }> {
+    const normalizedEmail = email.trim().toLowerCase();
+
+    if (this.isPostgresConnected && this.pool) {
+      const existing = await this.pool.query('SELECT id, name, email, role, phone, avatar, bio, is_verified, status, created_at, updated_at FROM users WHERE email = $1', [normalizedEmail]);
+      if (existing.rowCount && existing.rowCount > 0) {
+        const row = existing.rows[0];
+        return {
+          created: false,
+          user: {
+            id: row.id, name: row.name, email: row.email, role: row.role, phone: row.phone,
+            avatar: row.avatar, bio: row.bio, isVerified: row.is_verified, status: row.status,
+            createdAt: row.created_at, updatedAt: row.updated_at
+          }
+        };
+      }
+
+      const passwordHash = await bcrypt.hash(password, 10);
+      const id = `usr_admin_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+      const inserted = await this.pool.query(
+        `INSERT INTO users (id, name, email, password_hash, role, phone, avatar, bio, is_verified, status)
+         VALUES ($1, $2, $3, $4, 'admin', $5, $6, $7, TRUE, 'active')
+         RETURNING id, name, email, role, phone, avatar, bio, is_verified, status, created_at, updated_at`,
+        [id, name, normalizedEmail, passwordHash, '', '', '']
+      );
+      const row = inserted.rows[0];
+      return {
+        created: true,
+        user: {
+          id: row.id, name: row.name, email: row.email, role: row.role, phone: row.phone,
+          avatar: row.avatar, bio: row.bio, isVerified: row.is_verified, status: row.status,
+          createdAt: row.created_at, updatedAt: row.updated_at
+        }
+      };
+    }
+
+    const existingUser = this.getUserByEmail(normalizedEmail);
+    if (existingUser) {
+      const { passwordHash: _, ...safe } = existingUser;
+      return { created: false, user: safe };
+    }
+
+    const passwordHash = await bcrypt.hash(password, 10);
+    const now = new Date().toISOString();
+    const newUser = this.createUser({
+      id: `usr_admin_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+      name,
+      email: normalizedEmail,
+      passwordHash,
+      role: 'admin',
+      phone: '',
+      avatar: '',
+      bio: '',
+      isVerified: true,
+      status: 'active',
+      createdAt: now,
+      updatedAt: now
+    });
+    const { passwordHash: _, ...safe } = newUser;
+    return { created: true, user: safe };
+  }
+
+  /**
+   * Bootstraps the initial admin account from ADMIN_EMAIL/ADMIN_PASSWORD env
+   * vars, if both are set. No-op (with no default credentials) otherwise, and
+   * safe to call on every startup — a no-op once an account with that email
+   * already exists.
+   */
+  public async bootstrapAdminFromEnv(): Promise<void> {
+    const email = process.env.ADMIN_EMAIL;
+    const password = process.env.ADMIN_PASSWORD;
+    if (!email || !password) {
+      return;
+    }
+    const name = process.env.ADMIN_NAME || 'System Admin';
+
+    const { created } = await this.createAdminUser(email, password, name);
+    if (created) {
+      console.log(`[RentHub Database] Admin account bootstrapped for ${email}.`);
+    }
   }
 
   public getSchemaSQL(): string {
