@@ -86,15 +86,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return res.user;
   };
 
-  const quickLogin = async (role: 'landlord' | 'renter' | 'admin'): Promise<User> => {
-    const credentials: Record<string, { email: string; pass: string }> = {
-      landlord: { email: 'landlord@renthub.com', pass: 'landlord123' },
-      renter: { email: 'renter@renthub.com', pass: 'renter123' },
-      admin: { email: 'admin@renthub.com', pass: 'admin123' },
-    };
-
-    const cred = credentials[role];
-    return login(cred.email, cred.pass);
+  // Demo accounts have been removed from the backend, so quick login has no
+  // credentials to use. Kept as a stub (rather than deleted) so the calling
+  // UI can catch this and hide/disable the entry points instead of hitting
+  // the API with bogus credentials.
+  const quickLogin = async (_role: 'landlord' | 'renter' | 'admin'): Promise<User> => {
+    throw new Error('Quick login is unavailable: demo accounts have been removed. Please register or sign in.');
   };
 
   return (

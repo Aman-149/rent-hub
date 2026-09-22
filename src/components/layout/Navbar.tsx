@@ -15,8 +15,7 @@ import {
   X,
   Building2,
   CheckCheck,
-  ChevronDown,
-  Sparkles
+  ChevronDown
 } from 'lucide-react';
 import { useAuth } from '../../store/authContext';
 import { api } from '../../services/api';
@@ -24,7 +23,7 @@ import { NotificationItem } from '../../types';
 import { useToast } from '../common/Toast';
 
 export const Navbar: React.FC = () => {
-  const { user, isAuthenticated, logout, quickLogin } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
   const { showToast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
@@ -32,14 +31,12 @@ export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const [demoMenuOpen, setDemoMenuOpen] = useState(false);
 
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
 
   const notifRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
-  const demoMenuRef = useRef<HTMLDivElement>(null);
 
   const fetchNotifications = async () => {
     if (!isAuthenticated) return;
@@ -66,9 +63,6 @@ export const Navbar: React.FC = () => {
       }
       if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
         setUserMenuOpen(false);
-      }
-      if (demoMenuRef.current && !demoMenuRef.current.contains(e.target as Node)) {
-        setDemoMenuOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -104,19 +98,6 @@ export const Navbar: React.FC = () => {
       }
     } catch (e) {
       // quiet
-    }
-  };
-
-  const handleQuickSwitch = async (role: 'landlord' | 'renter' | 'admin') => {
-    try {
-      setDemoMenuOpen(false);
-      const u = await quickLogin(role);
-      showToast(`Switched account to ${u.name} (${u.role.toUpperCase()})`, 'success');
-      if (u.role === 'landlord') navigate('/dashboard/landlord');
-      else if (u.role === 'admin') navigate('/dashboard/admin');
-      else navigate('/dashboard/renter');
-    } catch (err: any) {
-      showToast(err.message || 'Login failed', 'error');
     }
   };
 
@@ -203,66 +184,6 @@ export const Navbar: React.FC = () => {
 
           {/* Right Action Bar */}
           <div className="hidden md:flex items-center gap-3">
-            {/* Quick Demo Switcher */}
-            <div className="relative" ref={demoMenuRef}>
-              <button
-                id="btn-demo-switch"
-                onClick={() => setDemoMenuOpen(!demoMenuOpen)}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg transition-colors"
-                title="Switch demo role instantly"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                <span>Demo Accounts</span>
-                <ChevronDown className="w-3 h-3 text-amber-600" />
-              </button>
-
-              {demoMenuOpen && (
-                <div
-                  id="demo-dropdown-menu"
-                  className="absolute right-0 mt-2 w-64 rounded-xl bg-white shadow-xl border border-zinc-200 p-2 z-50 animate-in fade-in slide-in-from-top-2"
-                >
-                  <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400 px-3 py-1.5">
-                    1-Click Switch Role
-                  </p>
-                  <button
-                    id="demo-switch-landlord"
-                    onClick={() => handleQuickSwitch('landlord')}
-                    className="w-full text-left px-3 py-2 rounded-lg text-xs font-medium text-zinc-700 hover:bg-emerald-50 hover:text-emerald-800 flex items-center justify-between transition-colors"
-                  >
-                    <div>
-                      <div className="font-semibold">Abebe Tadesse</div>
-                      <div className="text-zinc-500">Landlord (Manage listings & inquiries)</div>
-                    </div>
-                    <span className="px-1.5 py-0.5 text-[10px] bg-emerald-100 text-emerald-800 rounded font-bold">Landlord</span>
-                  </button>
-
-                  <button
-                    id="demo-switch-renter"
-                    onClick={() => handleQuickSwitch('renter')}
-                    className="w-full text-left px-3 py-2 rounded-lg text-xs font-medium text-zinc-700 hover:bg-sky-50 hover:text-sky-800 flex items-center justify-between transition-colors mt-1"
-                  >
-                    <div>
-                      <div className="font-semibold">Bethlehem Haile</div>
-                      <div className="text-zinc-500">Renter (Browse, inquiries, chats)</div>
-                    </div>
-                    <span className="px-1.5 py-0.5 text-[10px] bg-sky-100 text-sky-800 rounded font-bold">Renter</span>
-                  </button>
-
-                  <button
-                    id="demo-switch-admin"
-                    onClick={() => handleQuickSwitch('admin')}
-                    className="w-full text-left px-3 py-2 rounded-lg text-xs font-medium text-zinc-700 hover:bg-purple-50 hover:text-purple-800 flex items-center justify-between transition-colors mt-1"
-                  >
-                    <div>
-                      <div className="font-semibold">System Admin</div>
-                      <div className="text-zinc-500">Admin (Users, listings, reports)</div>
-                    </div>
-                    <span className="px-1.5 py-0.5 text-[10px] bg-purple-100 text-purple-800 rounded font-bold">Admin</span>
-                  </button>
-                </div>
-              )}
-            </div>
-
             {/* Landlord CTA button */}
             {user?.role === 'landlord' && (
               <Link
@@ -358,11 +279,9 @@ export const Navbar: React.FC = () => {
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
                   className="flex items-center gap-2.5 p-1 pl-2 pr-3 rounded-full border border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50 transition-colors"
                 >
-                  <img
-                    src={user.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80'}
-                    alt={user.name}
-                    className="w-7 h-7 rounded-full object-cover ring-1 ring-zinc-200"
-                  />
+                  <div className="w-7 h-7 rounded-full bg-zinc-100 ring-1 ring-zinc-200 flex items-center justify-center">
+                    <UserIcon className="w-4 h-4 text-zinc-500" />
+                  </div>
                   <div className="text-left hidden lg:block">
                     <p className="text-xs font-semibold text-zinc-900 leading-none truncate max-w-[120px]">{user.name}</p>
                     <span className="text-[10px] text-zinc-500 capitalize">{user.role}</span>
@@ -493,21 +412,6 @@ export const Navbar: React.FC = () => {
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div id="mobile-menu-drawer" className="md:hidden border-t border-zinc-200 bg-white px-4 pt-2 pb-6 space-y-3 shadow-lg">
-          <div className="grid grid-cols-2 gap-2 pt-2 pb-1">
-            <button
-              onClick={() => handleQuickSwitch('landlord')}
-              className="px-3 py-2 text-xs font-semibold bg-emerald-50 text-emerald-800 rounded-lg border border-emerald-200 text-center"
-            >
-              Demo: Landlord
-            </button>
-            <button
-              onClick={() => handleQuickSwitch('renter')}
-              className="px-3 py-2 text-xs font-semibold bg-sky-50 text-sky-800 rounded-lg border border-sky-200 text-center"
-            >
-              Demo: Renter
-            </button>
-          </div>
-
           <div className="space-y-1">
             <Link
               to="/"

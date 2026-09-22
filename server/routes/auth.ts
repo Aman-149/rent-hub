@@ -187,8 +187,7 @@ router.post('/forgot-password', (req, res) => {
   }
 
   return res.json({
-    message: 'Password reset link has been dispatched to your email.',
-    demoResetHint: 'In demo mode, you can simply use the default password "password123" or login via the 1-click Quick Login demo accounts.'
+    message: 'Password reset link has been dispatched to your email.'
   });
 });
 

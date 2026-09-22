@@ -67,11 +67,13 @@ export const LoginPage: React.FC = () => {
         </div>
 
         {/* Demo Fast Logins */}
+        {/*
         <div className="bg-emerald-50/60 rounded-2xl border border-emerald-100 p-4">
           <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-800 mb-2">
             <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
             <span>1-Click Demo Login</span>
           </div>
+          
           <div className="grid grid-cols-3 gap-2">
             <button
               id="demo-login-landlord"
@@ -99,7 +101,7 @@ export const LoginPage: React.FC = () => {
             </button>
           </div>
         </div>
-
+        */}
         {/* Login Form */}
         <div className="bg-white p-6 sm:p-8 rounded-3xl border border-zinc-200 shadow-sm">
           <form onSubmit={handleSubmit} className="space-y-4">
