@@ -21,7 +21,8 @@ import {
   RefreshCw,
   FileCode,
   Copy,
-  Check
+  Check,
+  User as UserIcon
 } from 'lucide-react';
 import { AdminStats, User, Property, ReportItem, DatabaseStatusInfo } from '../types';
 import { api } from '../services/api';
@@ -174,8 +175,8 @@ export const AdminDashboard: React.FC = () => {
   const handleResetDatabase = async () => {
     setIsResetting(true);
     try {
-      await api.resetDatabase();
-      showToast('Database reset to clean initial seeds!', 'success');
+      await api.clearDatabase();
+      showToast('Database cleared successfully!', 'success');
       setIsResetConfirmOpen(false);
       loadDatabaseInfo();
       loadAdminData();
@@ -405,11 +406,9 @@ export const AdminDashboard: React.FC = () => {
                   {filteredUsers.map(u => (
                     <tr key={u.id} className="hover:bg-zinc-50 transition-colors">
                       <td className="py-3 px-3 flex items-center gap-3">
-                        <img
-                          src={u.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=60&auto=format&fit=crop&q=80'}
-                          alt=""
-                          className="w-8 h-8 rounded-full object-cover ring-1 ring-zinc-200"
-                        />
+                        <div className="w-8 h-8 rounded-full bg-zinc-100 ring-1 ring-zinc-200 flex items-center justify-center flex-shrink-0">
+                          <UserIcon className="w-4 h-4 text-zinc-500" />
+                        </div>
                         <div>
                           <div className="font-bold text-zinc-900">{u.name}</div>
                           <div className="text-[11px] text-zinc-500">{u.email}</div>
@@ -678,7 +677,7 @@ export const AdminDashboard: React.FC = () => {
                     className="inline-flex items-center gap-2 px-4 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold rounded-2xl transition shadow-sm"
                   >
                     <RefreshCw className="w-4 h-4" />
-                    <span>Reset to Seeds</span>
+                    <span>Clear Database</span>
                   </button>
                 </div>
               </div>
@@ -771,9 +770,9 @@ export const AdminDashboard: React.FC = () => {
                   <div className="w-12 h-12 bg-rose-100 text-rose-600 rounded-2xl flex items-center justify-center mb-4">
                     <AlertTriangle className="w-6 h-6" />
                   </div>
-                  <h3 className="text-xl font-bold text-zinc-900">Reset Database to Initial Seeds?</h3>
+                  <h3 className="text-xl font-bold text-zinc-900">Clear the entire database?</h3>
                   <p className="text-sm text-zinc-600 mt-2">
-                    This will restore verified properties in Addis Ababa, test landlords, renters, and sample conversations. Any newly created listings will be refreshed.
+                    This permanently deletes all users, properties, inquiries, messages, and every other record. Your own admin account will be recreated afterward. This cannot be undone.
                   </p>
 
                   <div className="flex items-center justify-end gap-3 mt-6">
@@ -788,7 +787,7 @@ export const AdminDashboard: React.FC = () => {
                       disabled={isResetting}
                       className="px-5 py-2.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-xl transition shadow-sm disabled:opacity-50"
                     >
-                      {isResetting ? 'Resetting...' : 'Yes, Reset Database'}
+                      {isResetting ? 'Clearing...' : 'Yes, Clear Database'}
                     </button>
                   </div>
                 </div>
