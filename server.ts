@@ -1,8 +1,8 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import fs from 'fs';
-import { fileURLToPath } from 'url';
 import { createServer as createViteServer } from 'vite';
 
 import authRoutes from './server/routes/auth';
@@ -17,15 +17,30 @@ import notificationsRoutes from './server/routes/notifications';
 import mediaRoutes from './server/routes/media';
 import { db } from './server/db/database';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = process.env.PORT || 5000;
 
   // Middleware
-  app.use(cors());
+  const allowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    `http://localhost:${PORT}`,
+    process.env.FRONTEND_URL,
+  ].filter((origin): origin is string => Boolean(origin));
+
+  app.use(
+    '/api',
+    cors({
+      origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error('Not allowed by CORS'));
+        }
+      },
+    })
+  );
   app.use(express.json({ limit: '15mb' }));
   app.use(express.urlencoded({ extended: true, limit: '15mb' }));
 

@@ -78,15 +78,22 @@ router.post('/upload', authenticate, (req: Request, res: Response) => {
       return res.status(400).json({ error: 'No image data provided.' });
     }
 
-    // Determine extension and clean base64 data
-    let ext = 'jpg';
-    let base64Data = imageBase64;
+    const ALLOWED_MIME_TYPES: Record<string, string> = {
+      'image/jpeg': 'jpg',
+      'image/png': 'png',
+      'image/webp': 'webp'
+    };
 
-    const match = imageBase64.match(/^data:image\/([a-zA-Z0-9+]+);base64,(.+)$/);
-    if (match) {
-      ext = match[1] === 'jpeg' ? 'jpg' : match[1];
-      base64Data = match[2];
+    const match = typeof imageBase64 === 'string'
+      ? imageBase64.match(/^data:([a-zA-Z0-9.+-]+\/[a-zA-Z0-9.+-]+);base64,(.+)$/)
+      : null;
+
+    if (!match || !ALLOWED_MIME_TYPES[match[1]]) {
+      return res.status(400).json({ error: 'Only JPG, PNG, and WEBP image uploads are allowed.' });
     }
+
+    const ext = ALLOWED_MIME_TYPES[match[1]];
+    const base64Data = match[2];
 
     const buffer = Buffer.from(base64Data, 'base64');
     if (buffer.length > 10 * 1024 * 1024) {

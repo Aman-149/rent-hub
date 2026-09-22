@@ -1,6 +1,10 @@
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'renthub-super-secret-jwt-key-2026';
+if (!process.env.JWT_SECRET) {
+  throw new Error('JWT_SECRET environment variable is not set. Refusing to start.');
+}
+
+const JWT_SECRET: string = process.env.JWT_SECRET;
 
 export interface TokenPayload {
   id: string;
