@@ -135,8 +135,8 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ data })
     }),
-  resetDatabase: () =>
-    apiRequest('/admin/database/seed', {
+  clearDatabase: () =>
+    apiRequest('/admin/database/clear', {
       method: 'POST'
     }),
   getDatabaseSchema: () => apiRequest('/admin/database/schema')

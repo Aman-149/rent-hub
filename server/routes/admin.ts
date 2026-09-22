@@ -202,15 +202,22 @@ router.post('/database/import', authenticate, requireRole(['admin']), (req: Auth
   }
 });
 
-// POST /api/admin/database/seed
-router.post('/database/seed', authenticate, requireRole(['admin']), (_req: AuthenticatedRequest, res: Response) => {
+// POST /api/admin/database/clear
+// Wipes every table back to empty. Does NOT insert any demo/mock data —
+// users only come from self-registration (renter/landlord) or admin creation
+// (ADMIN_EMAIL/ADMIN_PASSWORD bootstrap or `npm run create-admin`). Since this
+// clears the users table, the currently authenticated admin's account would
+// be wiped too, so it is re-created (same email/password/role) after the clear.
+router.post('/database/clear', authenticate, requireRole(['admin']), async (req: AuthenticatedRequest, res: Response) => {
   try {
-    db.resetSeedData();
+    const requestingAdmin = req.user!;
+    db.clearAllData();
+    db.createUser(requestingAdmin);
     const status = db.getDatabaseStatus();
-    return res.json({ message: 'Database reset to initial production seeds.', status });
+    return res.json({ message: 'Database cleared.', status });
   } catch (error) {
-    console.error('Admin seed database error:', error);
-    return res.status(500).json({ error: 'Failed to seed database.' });
+    console.error('Admin clear database error:', error);
+    return res.status(500).json({ error: 'Failed to clear database.' });
   }
 });
 
