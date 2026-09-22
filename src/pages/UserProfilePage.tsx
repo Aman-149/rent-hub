@@ -1,16 +1,8 @@
 import React, { useState } from 'react';
-import { User, Phone, Mail, ShieldCheck, KeyRound, Check, Sparkles } from 'lucide-react';
+import { User, ShieldCheck, KeyRound } from 'lucide-react';
 import { useAuth } from '../store/authContext';
 import { api } from '../services/api';
 import { useToast } from '../components/common/Toast';
-
-const PRESET_AVATARS = [
-  'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&auto=format&fit=crop&q=80'
-];
 
 export const UserProfilePage: React.FC = () => {
   const { user, updateProfile } = useAuth();
@@ -19,8 +11,6 @@ export const UserProfilePage: React.FC = () => {
   const [name, setName] = useState(user?.name || '');
   const [phone, setPhone] = useState(user?.phone || '');
   const [bio, setBio] = useState(user?.bio || '');
-  const [avatar, setAvatar] = useState(user?.avatar || PRESET_AVATARS[0]);
-  const [customAvatar, setCustomAvatar] = useState('');
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
 
   // Password update
@@ -36,8 +26,7 @@ export const UserProfilePage: React.FC = () => {
       await updateProfile({
         name: name.trim(),
         phone: phone.trim(),
-        bio: bio.trim(),
-        avatar: customAvatar.trim() || avatar
+        bio: bio.trim()
       });
       showToast('Profile information updated successfully!', 'success');
     } catch (err: any) {
@@ -91,11 +80,9 @@ export const UserProfilePage: React.FC = () => {
           <div className="md:col-span-1 space-y-6">
             <div className="bg-white rounded-3xl p-6 border border-zinc-200 shadow-sm text-center">
               <div className="relative w-24 h-24 mx-auto mb-4">
-                <img
-                  src={avatar}
-                  alt={user.name}
-                  className="w-24 h-24 rounded-full object-cover ring-4 ring-emerald-500/20 shadow-md"
-                />
+                <div className="w-24 h-24 rounded-full bg-zinc-100 ring-4 ring-emerald-500/20 shadow-md flex items-center justify-center">
+                  <User className="w-10 h-10 text-zinc-500" />
+                </div>
                 {user.isVerified && (
                   <div className="absolute bottom-0 right-0 p-1.5 bg-emerald-600 rounded-full text-white ring-2 ring-white" title="Verified Member">
                     <ShieldCheck className="w-4 h-4" />
@@ -136,35 +123,6 @@ export const UserProfilePage: React.FC = () => {
               <h3 className="text-base font-bold text-zinc-900 mb-4">Personal Information</h3>
 
               <form onSubmit={handleProfileSave} className="space-y-4">
-                {/* Choose Avatar */}
-                <div>
-                  <label className="block text-xs font-semibold text-zinc-700 mb-2">
-                    Choose Profile Photo
-                  </label>
-                  <div className="flex items-center gap-3">
-                    {PRESET_AVATARS.map((url, idx) => (
-                      <button
-                        key={idx}
-                        type="button"
-                        onClick={() => {
-                          setAvatar(url);
-                          setCustomAvatar('');
-                        }}
-                        className={`relative w-11 h-11 rounded-full overflow-hidden border-2 transition-all ${
-                          avatar === url && !customAvatar ? 'border-emerald-600 ring-2 ring-emerald-500/30 scale-105' : 'border-zinc-200 opacity-80'
-                        }`}
-                      >
-                        <img src={url} alt={`Preset ${idx + 1}`} className="w-full h-full object-cover" />
-                        {avatar === url && !customAvatar && (
-                          <div className="absolute inset-0 bg-emerald-600/30 flex items-center justify-center text-white">
-                            <Check className="w-4 h-4" />
-                          </div>
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
                 <div>
                   <label className="block text-xs font-semibold text-zinc-700 mb-1">
                     Full Name

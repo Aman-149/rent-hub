@@ -9,7 +9,8 @@ import {
   CheckCheck,
   Phone,
   Search,
-  ArrowLeft
+  ArrowLeft,
+  User as UserIcon
 } from 'lucide-react';
 import { Conversation, Message } from '../types';
 import { api } from '../services/api';
@@ -180,11 +181,9 @@ export const MessagesPage: React.FC = () => {
                       }`}
                     >
                       <div className="relative shrink-0">
-                        <img
-                          src={conv.otherUser?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80'}
-                          alt={conv.otherUser?.name}
-                          className="w-11 h-11 rounded-full object-cover ring-1 ring-zinc-200"
-                        />
+                        <div className="w-11 h-11 rounded-full bg-zinc-100 ring-1 ring-zinc-200 flex items-center justify-center">
+                          <UserIcon className="w-5 h-5 text-zinc-500" />
+                        </div>
                         {conv.unreadCount > 0 && (
                           <span className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center ring-2 ring-white">
                             {conv.unreadCount}
@@ -234,11 +233,9 @@ export const MessagesPage: React.FC = () => {
                     >
                       <ArrowLeft className="w-5 h-5" />
                     </button>
-                    <img
-                      src={selectedConv.otherUser?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80'}
-                      alt={selectedConv.otherUser?.name}
-                      className="w-10 h-10 rounded-full object-cover ring-1 ring-zinc-200"
-                    />
+                    <div className="w-10 h-10 rounded-full bg-zinc-100 ring-1 ring-zinc-200 flex items-center justify-center flex-shrink-0">
+                      <UserIcon className="w-5 h-5 text-zinc-500" />
+                    </div>
                     <div>
                       <div className="flex items-center gap-1.5">
                         <h3 className="text-sm font-bold text-zinc-900">{selectedConv.otherUser?.name}</h3>

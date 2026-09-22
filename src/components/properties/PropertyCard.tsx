@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Bed, Bath, Maximize2, MapPin, Heart, ShieldCheck, Sparkles } from 'lucide-react';
+import { Bed, Bath, Maximize2, MapPin, Heart, ShieldCheck, Sparkles, User as UserIcon } from 'lucide-react';
 import { Property } from '../../types';
 import { api } from '../../services/api';
 import { useAuth } from '../../store/authContext';
@@ -176,11 +176,9 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property, onFavorite
         <div className="pt-3 border-t border-zinc-100 flex items-center justify-between text-xs">
           {property.landlord ? (
             <div className="flex items-center gap-2 min-w-0">
-              <img
-                src={property.landlord.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=60&auto=format&fit=crop&q=80'}
-                alt={property.landlord.name}
-                className="w-5 h-5 rounded-full object-cover shrink-0 ring-1 ring-zinc-200"
-              />
+              <div className="w-5 h-5 rounded-full bg-zinc-100 ring-1 ring-zinc-200 flex items-center justify-center shrink-0">
+                <UserIcon className="w-3 h-3 text-zinc-500" />
+              </div>
               <span className="text-zinc-600 truncate font-medium max-w-[110px]">
                 {property.landlord.name}
               </span>

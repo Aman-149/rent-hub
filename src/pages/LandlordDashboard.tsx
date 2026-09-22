@@ -13,7 +13,8 @@ import {
   ChevronRight,
   TrendingUp,
   Sparkles,
-  AlertCircle
+  AlertCircle,
+  User as UserIcon
 } from 'lucide-react';
 import { Property, Inquiry, InquiryStatus } from '../types';
 import { api } from '../services/api';
@@ -332,11 +333,9 @@ export const LandlordDashboard: React.FC = () => {
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-100 pb-4">
                       {/* Renter info */}
                       <div className="flex items-center gap-3">
-                        <img
-                          src={inq.renter?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&auto=format&fit=crop&q=80'}
-                          alt={inq.renter?.name}
-                          className="w-11 h-11 rounded-full object-cover ring-1 ring-zinc-200"
-                        />
+                        <div className="w-11 h-11 rounded-full bg-zinc-100 ring-1 ring-zinc-200 flex items-center justify-center flex-shrink-0">
+                          <UserIcon className="w-5 h-5 text-zinc-500" />
+                        </div>
                         <div>
                           <h4 className="text-sm font-bold text-zinc-900">{inq.renter?.name}</h4>
                           <span className="text-xs text-zinc-500">{inq.renter?.email} • {inq.renter?.phone || 'No phone'}</span>

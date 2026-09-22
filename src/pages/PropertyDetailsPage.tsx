@@ -23,7 +23,8 @@ import {
   Eye,
   ArrowLeft,
   Star,
-  StarHalf
+  StarHalf,
+  User as UserIcon
 } from 'lucide-react';
 import { Property, Review } from '../types';
 import { api } from '../services/api';
@@ -440,11 +441,9 @@ export const PropertyDetailsPage: React.FC = () => {
                     <div key={rev.id} className="p-4 bg-zinc-50/80 rounded-2xl border border-zinc-100 space-y-2">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2.5">
-                          <img
-                            src={rev.user?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80'}
-                            alt={rev.user?.name || 'Tenant'}
-                            className="w-8 h-8 rounded-full object-cover"
-                          />
+                          <div className="w-8 h-8 rounded-full bg-zinc-100 ring-1 ring-zinc-200 flex items-center justify-center flex-shrink-0">
+                            <UserIcon className="w-4 h-4 text-zinc-500" />
+                          </div>
                           <div>
                             <h5 className="text-xs font-bold text-zinc-900">{rev.user?.name || 'Verified Tenant'}</h5>
                             <span className="text-[10px] text-zinc-400">
@@ -546,11 +545,9 @@ export const PropertyDetailsPage: React.FC = () => {
               {property.landlord && (
                 <div className="p-4 bg-zinc-50 rounded-2xl border border-zinc-100 space-y-3">
                   <div className="flex items-center gap-3">
-                    <img
-                      src={property.landlord.avatar || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80'}
-                      alt={property.landlord.name}
-                      className="w-12 h-12 rounded-full object-cover ring-2 ring-white shadow-sm"
-                    />
+                    <div className="w-12 h-12 rounded-full bg-zinc-200 ring-2 ring-white shadow-sm flex items-center justify-center flex-shrink-0">
+                      <UserIcon className="w-6 h-6 text-zinc-500" />
+                    </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-1.5">
                         <h4 className="text-sm font-bold text-zinc-900 truncate">{property.landlord.name}</h4>
