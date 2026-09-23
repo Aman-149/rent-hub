@@ -39,6 +39,7 @@ async function startServer() {
           callback(new Error('Not allowed by CORS'));
         }
       },
+      credentials: true,
     })
   );
   app.use(express.json({ limit: '15mb' }));
