@@ -82,6 +82,10 @@ export const api = {
 
   // Reports
   createReport: (data: any) => apiRequest('/reports', { method: 'POST', body: JSON.stringify(data) }),
+
+  // Chat Assistant
+  sendChatMessage: (message: string, history: { role: 'user' | 'assistant'; content: string }[]) =>
+    apiRequest<{ reply: string }>('/chat', { method: 'POST', body: JSON.stringify({ message, history }) }),
   getAdminReports: () => apiRequest('/reports/admin'),
   updateAdminReport: (id: string, data: any) => apiRequest(`/reports/admin/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
 

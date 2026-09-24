@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './store/authContext';
 import { ToastProvider } from './components/common/Toast';
+import { ChatWidget } from './components/common/ChatWidget';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 
@@ -143,6 +144,7 @@ export function App() {
               </Routes>
             </main>
             <Footer />
+            <ChatWidget />
           </div>
         </ToastProvider>
       </AuthProvider>

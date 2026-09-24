@@ -15,11 +15,15 @@ import adminRoutes from './server/routes/admin';
 import statsRoutes from './server/routes/stats';
 import notificationsRoutes from './server/routes/notifications';
 import mediaRoutes from './server/routes/media';
+import chatRoutes from './server/routes/chat';
 import { db } from './server/db/database';
 
 async function startServer() {
   const app = express();
   const PORT = process.env.PORT || 5000;
+
+  // Trust the first proxy hop (Render/Vercel) so req.ip reflects the real client
+  app.set('trust proxy', 1);
 
   // Middleware
   const allowedOrigins = [
@@ -81,6 +85,7 @@ async function startServer() {
   app.use('/api/stats', statsRoutes);
   app.use('/api/notifications', notificationsRoutes);
   app.use('/api/media', mediaRoutes);
+  app.use('/api/chat', chatRoutes);
 
   // Global Error Handler for API
   app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
