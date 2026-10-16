@@ -30,6 +30,7 @@ async function startServer() {
     'http://localhost:3000',
     'http://localhost:5173',
     `http://localhost:${PORT}`,
+    'https://rent-hub-psi.vercel.app',
     process.env.FRONTEND_URL,
   ].filter((origin): origin is string => Boolean(origin));
 
@@ -40,7 +41,7 @@ async function startServer() {
         if (!origin || allowedOrigins.includes(origin)) {
           callback(null, true);
         } else {
-          callback(new Error('Not allowed by CORS'));
+          callback(null, false);
         }
       },
       credentials: true,
