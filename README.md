@@ -1,6 +1,24 @@
 # RentHub
 
-RentHub is a rental marketplace connecting landlords and renters, with listing discovery, inquiries, in-app chat, and an admin console for platform oversight.
+RentHub is a full-stack rental marketplace that connects landlords and renters. Landlords list and manage properties, renters browse and filter available listings, and both sides communicate directly through in-app inquiries and real-time chat. An admin console provides oversight of users, listings, and reported content across the platform.
+
+## Features
+
+- **Property listings** — landlords create, edit, and manage rental listings with photos and details
+- **Browse & discover** — renters search and filter properties, and save favorites
+- **Inquiries & chat** — renters contact landlords about a listing and continue the conversation through built-in messaging
+- **Notifications** — in-app alerts for new inquiries, messages, and account activity
+- **Role-based dashboards** — separate dashboards for renters, landlords, and admins
+- **Admin console** — user, listing, and report management, plus platform stats
+- **AI chat assistant** — a built-in widget to help users navigate the app
+
+## Tech Stack
+
+- **Frontend:** React 19, React Router, Vite, Tailwind CSS, Motion
+- **Backend:** Express (TypeScript), running under Bun/Node
+- **Auth:** JWT-based authentication with bcrypt password hashing
+- **Database:** PostgreSQL, with an embedded JSON file database fallback for local development
+- **Deployment:** configured for Render (API) and Vercel (frontend)
 
 ## Getting Started
 
